@@ -11,7 +11,7 @@
                 />
                 <field
                     name="deposit_product_id"
-                    attrs="{'invisible': ['|', '|', '|', '|', ('is_deposit', '!=', False), ('sale_ok', '=', False), ('type', '=', 'service'), ('available_in_pos', '=', False), '&amp;', ('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False))]}"
+                    attrs="{'invisible': ['|', '|', '|', '|', ('is_deposit', '!=', False), ('sale_ok', '=', False), ('type', '=', 'service'), ('available_in_pos', '=', False), '&amp;', ('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"
                 />
             </group>
         </field>
