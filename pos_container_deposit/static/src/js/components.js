@@ -9,9 +9,9 @@ odoo.define("pos_container_deposit.components", function (require) {
     const PosDepositOrderlineExtension = (Orderline) =>
         class PosDepositOrderline extends Orderline {
             selectLine() {
-                /*
+                /**
                  * Don't allow selecting deposit products
-                 */
+                 **/
                 if (!this.props.line.is_container_deposit) {
                     super.selectLine(...arguments);
                 }

@@ -24,10 +24,16 @@ class ProductTemplate(models.Model):
     @api.depends("product_variant_ids.deposit_product_id")
     def _compute_deposit_product_id(self):
         for this in self:
-            this.deposit_product_id = this.product_variant_ids.deposit_product_id
+            this.deposit_product_id = (
+                this.product_variant_ids.deposit_product_id
+                if this.product_variant_count == 1
+                else False
+            )
 
     def _inverse_deposit_product_id(self):
         for this in self:
+            if this.product_variant_count > 1:
+                continue
             this.product_variant_ids.write(
                 {
                     "deposit_product_id": this.deposit_product_id,

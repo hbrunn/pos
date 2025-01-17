@@ -13,9 +13,9 @@ odoo.define("pos_container_deposit.models", function (require) {
     const PosDepositOrderExtension = (Order) =>
         class PosDepositOrder extends Order {
             add_product(product) {
-                /*
+                /**
                  * Show an error message when adding a product with a container deposit product that is not loaded
-                 */
+                 **/
                 var deposit = null;
                 if (product.deposit_product_id) {
                     deposit = this.pos.db.product_by_id[product.deposit_product_id[0]];
@@ -36,9 +36,9 @@ odoo.define("pos_container_deposit.models", function (require) {
                 super.add_product(...arguments);
             }
             add_orderline(line) {
-                /*
+                /**
                  * When adding a product with container deposit, add its container deposit product
-                 */
+                 **/
                 super.add_orderline(...arguments);
                 if (line.container_deposit_product && !line.container_deposit_line) {
                     this.add_product(line.container_deposit_product, {
@@ -50,9 +50,9 @@ odoo.define("pos_container_deposit.models", function (require) {
                 }
             }
             select_orderline(line) {
-                /*
+                /**
                  * Never select an orderline with deposit, select one next to it instead
-                 */
+                 **/
                 if (line && line.is_container_deposit) {
                     const line_index = this.orderlines.indexOf(line);
                     if (line_index >= 0 && this.orderlines.length > 1) {
@@ -69,9 +69,9 @@ odoo.define("pos_container_deposit.models", function (require) {
     const PosDepositOrderlineExtension = (Orderline) =>
         class PosDepositOrderLine extends Orderline {
             constructor() {
-                /*
+                /**
                  * Set container deposit specific properties
-                 */
+                 **/
                 super(...arguments);
                 const deposit_product = this.product
                     ? this.pos.db.get_product_by_id(this.product.id).deposit_product_id
@@ -83,9 +83,9 @@ odoo.define("pos_container_deposit.models", function (require) {
                 }
             }
             init_from_JSON(json) {
-                /*
+                /**
                  * Restore container deposit specific properties and link between line with deposit and deposit line
-                 */
+                 **/
                 super.init_from_JSON(json);
                 if (json.container_deposit_line_id) {
                     this.container_deposit_line =
@@ -105,9 +105,9 @@ odoo.define("pos_container_deposit.models", function (require) {
                 }
             }
             export_as_JSON() {
-                /*
+                /**
                  * Export deposit line as id
-                 */
+                 **/
                 const result = super.export_as_JSON();
                 result.is_container_deposit = this.is_container_deposit;
                 if (this.container_deposit_line) {
@@ -116,9 +116,9 @@ odoo.define("pos_container_deposit.models", function (require) {
                 return result;
             }
             set_quantity(quantity, keep_price) {
-                /*
+                /**
                  * When setting quantity of a product with deposit, also add to its deposit line
-                 */
+                 **/
                 const difference =
                     quantity === "remove" ? -this.quantity : quantity - this.quantity;
                 const deposit_line = this.container_deposit_line;
@@ -137,9 +137,9 @@ odoo.define("pos_container_deposit.models", function (require) {
                 return result;
             }
             can_be_merged_with(orderline) {
-                /*
+                /**
                  * Never merge deposit orderlines
-                 */
+                 **/
                 if (this.is_container_deposit || orderline.is_container_deposit) {
                     return false;
                 }
